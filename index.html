@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MuseRec</title>
+</head>
+<body>
+    <h1>MuseRec Main</h1>
+    
+    <video id="myVidPlayer" controls muted autoplay></video>
+    <button onclick="snapshot()" >Snapshot</button>
+    <div class="mycanvas">
+        <h6>Captured snapshot</h6>
+        <canvas></canvas>
+    </div>
+    
+    <!-- Emotion result -->
+    <div id="emotion_result">Emotion: <span id="emotion_text">No data</span></div>
+    
+    <!-- Start/Stop button -->
+    <button id="start_stop_button" onclick="toggleVideo()">Start Video</button>
+    
+    <script>
+        var videoStream = document.getElementById('video_stream');
+        var emotionText = document.getElementById('emotion_text');
+        var startStopButton = document.getElementById('start_stop_button');
+        var streaming = false;
+        
+        // Toggle video streaming and button text
+        function toggleVideo() {
+            if (!streaming) {
+                videoStream.src = "{{ url_for('video_feed') }}";
+                emotionText.innerHTML = 'No data';
+                startStopButton.innerHTML = 'Stop Video';
+            } else {
+                videoStream.src = '';
+                emotionText.innerHTML = 'Stopped';
+                startStopButton.innerHTML = 'Start Video';
+            }
+            streaming = !streaming;
+        }
+        
+        // Function to update emotion result
+        function updateEmotionResult(emotion) {
+            emotionText.innerHTML = emotion;
+        }
+        
+        // Function to periodically fetch emotion results
+        function fetchEmotionResult() {
+            fetch('/get_emotion_result')
+                .then(response => response.text())
+                .then(data => {
+                    updateEmotionResult(data);
+                    if (streaming) {
+                        setTimeout(fetchEmotionResult, 1000);  // Update every second
+                    }
+                });
+        }
+        
+        // Start fetching emotion results when streaming starts
+        videoStream.onload = function() {
+            if (streaming) {
+                fetchEmotionResult();
+            }
+        };
+    </script>
+</body>
+</html>
