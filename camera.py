@@ -21,14 +21,6 @@ class Video(object):
         loaded_model_json = json_file.read()
         json_file.close()
         emotion_model = model_from_json(loaded_model_json)
-
-        #loading weights into the model
-        #try:
-        #    emotion_model.load_weights("Model/emotion_model.h5")
-        #    print("Model Successfully loaded")
-        #except Exception as e:
-        #    print("Error loading model:", str(e))
-            
         emotion_model.load_weights("Model/emotion_model.h5")
             
         ret, frame = self.video.read()
