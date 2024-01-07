@@ -27,7 +27,7 @@ class Video(object):
         if not ret:
             return None, None
 
-        frame = cv2.resize(frame, (1280, 720))
+        frame = cv2.resize(frame, (850, 480))
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         num_faces = face_detector.detectMultiScale(gray_frame, scaleFactor=1.3, minNeighbors=5)
 

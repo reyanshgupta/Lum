@@ -55,7 +55,11 @@ playlist_mapping = {
 }
 
 @app.route('/')
-def index():
+def login():
+    return render_template('login.html')
+
+@app.route('/home')
+def home():
     global emotion_counter, emotion_duration
     emotion_counter.clear()
     emotion_duration.clear()
