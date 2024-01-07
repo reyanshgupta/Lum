@@ -71,6 +71,7 @@ def gen():
                 elapsed_time = time.time() - start_time
                 if emotion:
                     emotion_duration[emotion] = elapsed_time
+                    print(f"Emotion detected: {emotion} at {time.strftime('%Y-%m-%d %H:%M:%S')}")
                 else:
                     emotion_duration.clear()
 
