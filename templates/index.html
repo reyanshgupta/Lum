@@ -13,28 +13,50 @@
         <button id="camera-btn" class="btn btn-primary">Turn On Camera</button>
       </div>
       <div id="video-container" class="mt-4" style="display:none;">
-        <img src="{{ url_for('video') }}" id="video-stream">
+        <img src="" id="video-stream">
       </div>
     </div>
 
     {% block content %}
     {% endblock %}
-    <script>
-        setTimeout(function() {
-            window.location.href = "/suggest_playlist";
-        }, 8000);
-    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script>
-      // JavaScript to handle camera button click
+      var checkInterval;
+
+      function startCamera() {
+        fetch('/start_camera', { method: 'POST' });
+        checkInterval = setInterval(checkEmotion, 1000); // Check every second
+      }
+
+      function stopCamera() {
+        var videoStream = document.getElementById('video-stream');
+        videoStream.src = "";
+        clearInterval(checkInterval); // Stop checking emotion
+      }
+
+      function checkEmotion() {
+        fetch('/check_emotion')
+        .then(response => response.json())
+        .then(data => {
+            if (data.emotion_detected) {
+                stopCamera();
+                window.location.href = "/suggest_playlist";
+            }
+        });
+      }
+
       document.getElementById('camera-btn').addEventListener('click', function() {
         var videoContainer = document.getElementById('video-container');
         var btn = this;
         if (videoContainer.style.display === "none") {
           videoContainer.style.display = "block";
+          document.getElementById('video-stream').src = "{{ url_for('video_feed') }}";
           btn.textContent = 'Turn Off Camera';
+          startCamera();
         } else {
           videoContainer.style.display = "none";
+          stopCamera();
           btn.textContent = 'Turn On Camera';
         }
       });

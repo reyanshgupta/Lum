@@ -1,11 +1,18 @@
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request, jsonify
 from camera import Video
-from collections import Counter
+from collections import Counter, defaultdict
+from threading import Lock
+import time
 
 app = Flask(__name__)
 
-# Global variable to store emotions
+# Global variables
 emotion_counter = Counter()
+emotion_duration = defaultdict(int)
+camera = Video()
+lock = Lock()
+start_time = None
+emotion_detected_flag = False
 
 # Emotion to Spotify playlist embed mapping
 playlist_mapping = {
@@ -49,24 +56,50 @@ playlist_mapping = {
 
 @app.route('/')
 def index():
-    global emotion_counter
+    global emotion_counter, emotion_duration
     emotion_counter.clear()
+    emotion_duration.clear()
     return render_template('index.html')
 
-def gen(camera):
-    global emotion_counter
+def gen():
+    global start_time, emotion_counter, emotion_duration, emotion_detected_flag
     while True:
-        frame, emotion = camera.get_frame()
-        if emotion:
-            emotion_counter[emotion] += 1
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + 
-               b'\r\n\r\n')
+        with lock:
+            frame, emotion = camera.get_frame()
 
-@app.route('/muserec')
-def video():
-    return Response(gen(Video()),
+            if start_time:
+                elapsed_time = time.time() - start_time
+                if emotion:
+                    emotion_duration[emotion] = elapsed_time
+                else:
+                    emotion_duration.clear()
+
+                if any(duration >= 4 for duration in emotion_duration.values()):
+                    emotion_detected_flag = True
+                    for emo in emotion_duration:
+                        emotion_counter[emo] += 1
+                    emotion_duration.clear()
+                    start_time = None
+
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame +
+                   b'\r\n\r\n')
+
+@app.route('/check_emotion')
+def check_emotion():
+    return jsonify({'emotion_detected': emotion_detected_flag})
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/start_camera', methods=['POST'])
+def start_camera():
+    global start_time, emotion_detected_flag
+    start_time = time.time()
+    emotion_detected_flag = False
+    return '', 204
 
 @app.route('/suggest_playlist')
 def suggest_playlist():
