@@ -3,3 +3,4 @@ FER2013Dataset/.DS_Store
 .DS_Store
 trainingEmotionDetector.py
 ./__pycache__
+__pycache__/camera.cpython-310.pyc
