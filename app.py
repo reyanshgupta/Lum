@@ -67,6 +67,18 @@ def home():
     emotion_detected_flag = False
     return render_template('index.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html') 
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/user_playlist_suggest')
+def user_playlist_suggest():
+    return render_template('user_playlist_suggest.html')
+
 def gen():
     global start_time, emotion_counter, emotion_duration, emotion_detected_flag
     while True:

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lum - Playlist Suggestion</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="static/style.css" rel="stylesheet"/>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/user_playlist_suggest">Playlist Suggestion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About Lum</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="text-center">
+        <img src="static/logo.png" alt="Lum Logo" style="height: 160px;">
+    </div>
+    <div class="container">
+        <div class="my-4">
+            <h2 align="center">Playlist Suggestion</h2>
+            <p align="center">Know a playlist that matches a mood? Share it with us!</p>
+            <form>
+                <div class="mb-3">
+                    <label for="userEmail" class="form-label">Your Email</label>
+                    <input type="email" class="form-control" id="userEmail" placeholder="Enter your email">
+                </div>
+                <div class="mb-3">
+                    <label for="playlistLink" class="form-label">Playlist Link</label>
+                    <input type="url" class="form-control" id="playlistLink" placeholder="Enter playlist link">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Select Emotion</label>
+                    <select class="form-select" aria-label="Emotion select">
+                        <option selected>Select Emotion</option>
+                        <option value="Happy">Happy</option>
+                        <option value="Sad">Sad</option>
+                        <option value="Angry">Angry</option>
+                        <option value="Neutral">Neutral</option>
+                        <option value="Fearful">Fearful</option>
+                        <option value="Disgusted">Disgusted</option>
+                        <option value="Surprised">Surprised</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Suggestion</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

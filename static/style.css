@@ -1,0 +1,85 @@
+/* Global Styles */
+body {
+    background-color: #f0f4f8; /* Light grayish-blue for a cool and airy feel */
+    color: #333; /* Darker text for contrast */
+    font-family: 'Arial', sans-serif; /* Clean and simple font */
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #ffffff; /* Pure white for a clean look */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.nav-link {
+    color: #007bff; /* Cool blue for links */
+}
+
+.nav-link:hover {
+    color: #0056b3; /* Darker blue on hover for interaction */
+}
+
+/* Logo and Header Styles */
+.navbar-brand img {
+    height: 60px; /* Adjusted logo size for balance */
+}
+
+/* Main Content Styles */
+.container {
+    max-width: 800px; /* Spacious yet focused content area */
+    margin: 30px auto; /* Centered with vertical spacing */
+    padding: 15px;
+    background-color: #ffffff; /* White background for content area */
+    border-radius: 8px; /* Slightly rounded corners for a softer look */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Light shadow for depth */
+}
+
+h1, h2 {
+    color: #007bff; /* Cool blue for headings */
+    margin-top: 0;
+}
+
+p {
+    line-height: 1.6; /* Spacious line height for readability */
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* Video Container Styles */
+#video-container {
+    margin-top: 20px;
+    text-align: center; /* Center align video stream */
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+    background-color: #f0f4f8;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        margin: 15px;
+        padding: 10px;
+    }
+
+    .navbar-brand img {
+        height: 50px;
+    }
+}

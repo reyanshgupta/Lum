@@ -1,76 +1,127 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lum</title>
+    <title>Lum - Love ur Music</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-  </head>
-  <body>
-    <div class="container">
-      <h1 class="text-center mt-4">LUM</h1>
-      <div class="my-4">
-        <h2>Welcome to Lum, your go-to emotion companion! 🎶</h2>
-        <p>Lum is more than just a music app - it's your mood-lifting sidekick. Using advanced emotion detection powered by machine learning, Lum tunes into your feelings and curates personalized playlists to match your mood. Feeling down? Let Lum pick you up with a playlist tailored just for you.</p>
-        <p>With a sleek and user-friendly interface, Lum keeps it simple. Our frontend, crafted on Bootstrap, ensures a smooth experience. The heart of Lum lies in its Machine Learning algorithm which analyzes emotions and recommends the perfect tunes.</p>
-        <p>Why just listen when you can feel the music? Join Lum for a musical journey that understands you. After all, music is the best remedy for the soul.</p>
-        <p>Get ready to embrace the power of music with Lum - where emotions meet melodies! 🎵</p>
-      </div>
-      <div class="text-center mt-4">
-        <button id="camera-btn" class="btn btn-primary">Turn On Camera</button>
-      </div>
-      
-      <div style="justify-content: center; display:flex;">
-        <div id="video-container" class="mt-4" style="display:none;">
-          <img src="" id="video-stream">
+    <link href="static/style.css" rel="stylesheet"/>
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+        .navbar {
+            background-color: #ffffff;
+        }
+        .navbar-brand,
+        .nav-link {
+            color: #007bff;
+        }
+        .nav-link:hover {
+            color: #0056b3;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .container {
+            padding-top: 30px;
+            padding-bottom: 30px;
+            max-width: 600px;
+        }
+        h2 {
+            font-size: 1.75rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #video-container {
+            margin-top: 20px;
+        }
+        #camera-btn {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <!-- <a class="navbar-brand" href="/home">Lum</a> -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user_playlist_suggest">Playlist Suggestion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About Lum</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
+    </nav>
+    <div class="text-center">
+        <img src="static/logo.png" alt="Lum Logo" style="height: 160px;">
     </div>
-
-    {% block content %}
-    {% endblock %}
+    <div class="container text-center">
+        <h2>Welcome to Lum!</h2>
+        <p>Turn on your camera to get a playlist recommendation!</p>
+        <button id="camera-btn" class="btn btn-primary">Turn On Camera</button>
+        <div id="video-container" class="mt-4" style="display:none;">
+            <img src="" id="video-stream">
+        </div>
+    </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script>
-      var checkInterval;
+        var checkInterval;
 
-      function startCamera() {
-        fetch('/start_camera', { method: 'POST' });
-        checkInterval = setInterval(checkEmotion, 1000); // Check every second
-      }
+        function startCamera() {
+            fetch('/start_camera', { method: 'POST' });
+            checkInterval = setInterval(checkEmotion, 1000); // Check every second
+        }
 
-      function stopCamera() {
-        var videoStream = document.getElementById('video-stream');
-        videoStream.src = "";
-        clearInterval(checkInterval); // Stop checking emotion
-      }
+        function stopCamera() {
+            var videoStream = document.getElementById('video-stream');
+            videoStream.src = "";
+            clearInterval(checkInterval); // Stop checking emotion
+        }
 
-      function checkEmotion() {
-        fetch('/check_emotion')
-        .then(response => response.json())
-        .then(data => {
-            if (data.emotion_detected) {
+        function checkEmotion() {
+            fetch('/check_emotion')
+            .then(response => response.json())
+            .then(data => {
+                if (data.emotion_detected) {
+                    stopCamera();
+                    window.location.href = "/suggest_playlist";
+                }
+            });
+        }
+
+        document.getElementById('camera-btn').addEventListener('click', function() {
+            var videoContainer = document.getElementById('video-container');
+            var btn = this;
+            if (videoContainer.style.display === "none") {
+                videoContainer.style.display = "block";
+                document.getElementById('video-stream').src = "{{ url_for('video_feed') }}";
+                btn.textContent = 'Turn Off Camera';
+                startCamera();
+            } else {
+                videoContainer.style.display = "none";
+                document.getElementById('video-stream').src = "";
+                btn.textContent = 'Turn On Camera';
                 stopCamera();
-                window.location.href = "/suggest_playlist";
             }
         });
-      }
-      document.getElementById('camera-btn').addEventListener('click', function() {
-    var videoContainer = document.getElementById('video-container');
-    var btn = this;
-    if (videoContainer.style.display === "none") {
-        videoContainer.style.display = "block";
-        document.getElementById('video-stream').src = "{{ url_for('video_feed') }}";
-        btn.textContent = 'Turn Off Camera';
-        startCamera();
-    } else {
-        videoContainer.style.display = "none";
-        document.getElementById('video-stream').src = ""; // stop the video stream
-        btn.textContent = 'Turn On Camera';
-        stopCamera();
-    }
-});
-
     </script>
-  </body>
+</body>
 </html>
