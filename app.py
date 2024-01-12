@@ -60,9 +60,11 @@ def login():
 
 @app.route('/home')
 def home():
-    global emotion_counter, emotion_duration
+    global emotion_counter, emotion_duration, start_time, emotion_detected_flag
     emotion_counter.clear()
     emotion_duration.clear()
+    start_time = None
+    emotion_detected_flag = False
     return render_template('index.html')
 
 def gen():
@@ -79,7 +81,7 @@ def gen():
                 else:
                     emotion_duration.clear()
 
-                if any(duration >= 4 for duration in emotion_duration.values()):
+                if any(duration >= 5 for duration in emotion_duration.values()):
                     emotion_detected_flag = True
                     for emo in emotion_duration:
                         emotion_counter[emo] += 1
@@ -101,9 +103,11 @@ def video_feed():
 
 @app.route('/start_camera', methods=['POST'])
 def start_camera():
-    global start_time, emotion_detected_flag
+    global start_time, emotion_detected_flag, emotion_counter, emotion_duration
     start_time = time.time()
     emotion_detected_flag = False
+    emotion_counter.clear()
+    emotion_duration.clear()
     return '', 204
 
 @app.route('/suggest_playlist')
@@ -114,3 +118,4 @@ def suggest_playlist():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    
