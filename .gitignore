@@ -2,4 +2,5 @@ FER2013Dataset
 FER2013Dataset/.DS_Store
 .DS_Store
 trainingEmotionDetector.py
+Dockerfile
 testingEmotionalDetector.py
