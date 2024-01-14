@@ -80,7 +80,7 @@
         <p>Turn on your camera to get a playlist recommendation!</p>
         <button id="camera-btn" class="btn btn-primary">Turn On Camera</button>
         <div id="video-container" class="mt-4" style="display:none;">
-            <img src="" id="video-stream">
+            <video id="video" playsinline autoplay style="display:none;"></video>
         </div>
     </div>
     
@@ -88,17 +88,33 @@
     <script>
         var checkInterval;
 
-        function startCamera() {
-            fetch('/start_camera', { method: 'POST' });
-            checkInterval = setInterval(checkEmotion, 1000); // Check every second
-        }
+        const videoElement = document.getElementById('video');
+    const cameraButton = document.getElementById('camera-btn');
 
-        function stopCamera() {
-            var videoStream = document.getElementById('video-stream');
-            videoStream.src = "";
-            clearInterval(checkInterval); // Stop checking emotion
+    cameraButton.addEventListener('click', async () => {
+        if (videoElement.style.display === 'none') {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+                videoElement.style.display = 'block';
+                cameraButton.textContent = 'Turn Off Camera';
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+            }
+        } else {
+            stopCamera();
         }
+    });
 
+    function stopCamera() {
+        const stream = videoElement.srcObject;
+        if (stream) {
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+        }
+        videoElement.style.display = 'none';
+        cameraButton.textContent = 'Turn On Camera';
+    }
         function checkEmotion() {
             fetch('/check_emotion')
             .then(response => response.json())

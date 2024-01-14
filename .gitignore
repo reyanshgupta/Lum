@@ -4,3 +4,4 @@ FER2013Dataset/.DS_Store
 trainingEmotionDetector.py
 Dockerfile
 testingEmotionalDetector.py
+*.pyc
