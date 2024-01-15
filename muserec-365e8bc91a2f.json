@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "muserec",
+  "private_key_id": "365e8bc91a2f6f1e9398a0e1e150e1eba16c718c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCqK8DJZdWb3Ooh\nkaMNwCDQyCntOauMJavn/7uLVoV6rvoIZMo2RMCq6yPka0ohvfjutrvfDiscA2ci\nprvgENTB0r7EhV0/r7YiJ0XWt0dKtVvRD6QhFkwtCD2nNhHsZoEf6QrLNwspiNEM\nebwivWLNzeczPL7Jxg5x3HHr00MCQLImdy2YR6i8D9qiVByLG0R8Zy8316/2uzrE\nZ41FpDodsGNjWcJDknkGZGAY9xmdeyTuuGzvVUNSwC8aGV9n/9OKD76I/7FD/yFu\nygJrvTUMeIQ+Fulg+PbVyfKqmEZeU1NAbYxpA8uHTwZN32hFVNTu+ZeqvctzWRzO\ntLO0n7dDAgMBAAECggEAQLIptWf18i/nA6Qu7Ydh8n5nEj2ersWTubxMPQlD7gSg\nIpjPGBrDdTe4iZsQsAtdnMP0YTUtxpS0nUPuoZ1EhfvtcyGQ9imDgTCVKLC9dfXF\nVpIvwDSN+YDsj6nK3qmJ5evfoqrmn3/YmnmdwUdnTP8/KwepMWUPENLSrOnAzBXV\nPHTTZKY0u+5jvX8ZZnINQiYfr1t9tm95gxyPwc8383hwAs0gB0K7uQ2ziNKzwl5g\nE2YlPPJcKTCarpzqCL+nJCYTZIA/lRY3W4fKrVzKqtayQ6YRW3LFTifHa732/V5P\nYKAxpBS1c1ressklISmR1vGMdbbQAyAB3ove6/XnYQKBgQDlU33xvKW9Lff4vYyy\nYaKjOHW6tvcA/GRo9GJoNxY6Io1fnL0c/UZu8izzgjI+G8AHXLOq+BGKI9rPUa7i\n2vTPVZoxY7+oOBY06avM2RQD3ksRwCcXff8G8pPebraoXo3kgOHVAt4ecuuvvzxB\nau00TxEvJnrI7Vs2lL2rb4ROlwKBgQC99tS9gdubjmPVxVnRQuAeM5etks4OGaTI\nf3JQGnFLnW3cFTiK7UAMlpCkX8w/xmzMbK2/GSyycp4nCNIhFzKNzakNTdFQ9FeY\ns/qDcSFc1JHWqjy0PUR7M1dktXnwkm/b1V+Nw4n7FUn1oYDA5/sD9BVAnjO+poqR\nX6zVzaBeNQKBgQDZLU27zk0jsNICxfflwyMT8ldEIRwg2eV5o99CFNE+8xPxtW0/\nc/js/vplDirouL0N+9PHGTD7IuOIrTGzc2qeo9Hn7jBGbf9R0u25jOcwlqd/QvuC\nevc3LCmvYCgpoYo9GXVFlnamXW0ovjGhPlMv06VRgt6LRIW6Vfidz3l8NwKBgFPX\nZivB7agpXzzRXoPyjTInOTGdkp48iTMItO5PzWM/N2akYxFGBzfHGE3EDkSzkf9j\nlAe817JmzhCSXxPFxkU52PwLNXASd7ro7I8o1j2/gCKLfkFarSfnEBJd2lTofMA8\n23CZNgQAcGUeA9KgUHR9PQgJCvOBU7U30fOHTtllAoGACQ2aVEJNMayM+fN4jJqt\ny6dDCr160j2qPQACFEjkPDdlt70YOK9nnQLS+7aBswQujg61wW8+curNpI8Xf1kq\nKvMMwLFRtN03ePvbLYBnSgilhZOzrJ7cPuqOyKNoqyhmT38drcYnJTB0hy63GHw4\nZNnUIIW9t9WC/mJmqlo+F0o=\n-----END PRIVATE KEY-----\n",
+  "client_email": "lumadmin@muserec.iam.gserviceaccount.com",
+  "client_id": "108988033653173491247",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/lumadmin%40muserec.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
