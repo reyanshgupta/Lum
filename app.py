@@ -5,43 +5,16 @@ from collections import Counter, defaultdict
 from threading import Lock
 import time
 from google.cloud import vision
+from google.oauth2 import service_account
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "muserec-365e8bc91a2f.json" 
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'muserec-365e8bc91a2f.json'
+client = vision.ImageAnnotatorClient()
 
 app = Flask(__name__)
-
-# Global variables
-emotion_counter = Counter()
-emotion_duration = defaultdict(int)
+emotion = None
 camera = Video()
 lock = Lock()
-start_time = None
 emotion_detected_flag = False
-
-@app.route('/')
-def login():
-    return render_template('login.html')
-
-@app.route('/home')
-def home():
-    global emotion_counter, emotion_duration, start_time, emotion_detected_flag
-    emotion_counter.clear()
-    emotion_duration.clear()
-    start_time = None
-    emotion_detected_flag = False
-    return render_template('index.html')
-
-@app.route('/about')
-def about():
-    return render_template('about.html') 
-
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
-
-@app.route('/user_playlist_suggest')
-def user_playlist_suggest():
-    return render_template('user_playlist_suggest.html')
 
 playlist_mapping = {
     "Happy": [
@@ -82,34 +55,49 @@ playlist_mapping = {
     ]
 }
 
+@app.route('/')
+def login():
+    return render_template('login.html')
+
+@app.route('/home')
+def home():
+    # global emotion_counter, emotion_duration, start_time, emotion_detected_flag
+    # emotion_counter.clear()
+    # emotion_duration.clear()
+    # start_time = None
+    # emotion_detected_flag = False
+    return render_template('index.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html') 
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/user_playlist_suggest')
+def user_playlist_suggest():
+    return render_template('user_playlist_suggest.html')
+
 def gen():
-    global start_time, emotion_counter, emotion_duration, emotion_detected_flag
+    # global emotion_counter, emotion_detected_flag, camera
     while True:
-        with lock:
-            frame, emotion = camera.get_frame() 
+        # with lock:
+        frame, emotion = camera.get_frame() 
+        if emotion:
+            print(f"Emotion detected: {emotion} at {time.strftime('%Y-%m-%d %H:%M:%S')}")
+            # emotion_detected_flag = True
+            # emotion_counter[emotion] += 1
 
-            if start_time:
-                elapsed_time = time.time() - start_time
-                if emotion:
-                    emotion_duration[emotion] += elapsed_time
-                    print(f"Emotion detected: {emotion} at {time.strftime('%Y-%m-%d %H:%M:%S')}")
-                else:
-                    emotion_duration.clear()
+        yield (b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame +
+                b'\r\n\r\n')
 
-            if any(duration >= 5 for duration in emotion_duration.values()):
-                emotion_detected_flag = True
-                for emo in emotion_duration:
-                    emotion_counter[emo] += 1
-                emotion_duration.clear()
-                start_time = None
-
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame +
-                   b'\r\n\r\n')
 
 @app.route('/check_emotion')
 def check_emotion():
-    return jsonify({'emotion_detected': emotion_detected_flag})
+    return jsonify({'emotion_detected': emotion})
 
 @app.route('/video_feed')
 def video_feed():
@@ -120,9 +108,9 @@ def video_feed():
 def start_camera():
     global start_time, emotion_detected_flag, emotion_counter, emotion_duration
     start_time = time.time()
-    # emotion_detected_flag = False
-    # emotion_counter.clear()
-    # emotion_duration.clear()
+    emotion_detected_flag = False
+    emotion_counter.clear()
+    emotion_duration.clear()
     return '', 204
 
 @app.route('/suggest_playlist')

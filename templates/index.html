@@ -86,10 +86,22 @@
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script>
-        var checkInterval;
-
-        const videoElement = document.getElementById('video');
+    var checkInterval;
+    const videoElement = document.getElementById('video');
     const cameraButton = document.getElementById('camera-btn');
+
+    function checkEmotion() {
+    fetch('/check_emotion')
+    .then(response => response.json())
+    .then(data => {
+        if (data.emotion_detected) {
+            console.log("Emotion detected. Redirecting to /suggest_playlist");
+            stopCamera();
+            window.location.href = "/suggest_playlist";
+        }
+    });
+}
+
 
     cameraButton.addEventListener('click', async () => {
         if (videoElement.style.display === 'none') {

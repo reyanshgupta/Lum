@@ -1,9 +1,13 @@
+import io
+import os
 import numpy as np
-from keras.models import model_from_json
-import keras
 from google.cloud import vision
 import cv2
-GOOGLE_APPLICATION_CREDENTIALS="/muserec-365e8bc91a2f.json"
+from google.cloud import vision
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'muserec-365e8bc91a2f.json'
+client = vision.ImageAnnotatorClient()
+
 
 face_detector = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_default.xml')
 
@@ -11,39 +15,52 @@ class Video(object):
     def __init__(self):
         self.video = cv2.VideoCapture(0)
         self.client = vision.ImageAnnotatorClient()
-        self.emotion_model = self.load_emotion_model()
 
     def __del__(self):
         self.video.release()
-        
-    def get_frame(self):
-        emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
-        ret, frame = self.video.read()
-        if not ret:
-            return None, None
 
-        frame = cv2.resize(frame, (850, 480))
-        cv2.imwrite("frame.jpg", frame)
-        with open("frame.jpg", "rb") as image_file:
-            content = image_file.read()
+    class Video(object):
+        def __init__(self):
+            self.video = cv2.VideoCapture(0)
 
-        current_emotion = None
+        def __del__(self):
+            self.video.release()
 
-        response = self.client.face_detection(image=content)
-        faces = response.face_annotations
+        def get_frame(self):
+            emotion_dict = {
+                "VERY_UNLIKELY": "Neutral",
+                "UNLIKELY": "Neutral",
+                "POSSIBLE": "Uncertain",
+                "LIKELY": "Likely",
+                "VERY_LIKELY": "Very Likely"
+            }
+            ret, frame = self.video.read()
+            if not ret:
+                return None, "No Frame"
 
-        if faces:
-            face = faces[0]
-            emotions = face.joy_likelihood, face.sorrow_likelihood, face.anger_likelihood, face.surprise_likelihood
-            max_index = np.argmax(emotions) 
-            current_emotion = emotion_dict[max_index]
-        return frame, current_emotion
-    
-    
-     # def load_emotion_model(self):
-    #     json_file = open('Model/emotion_model.json', 'r')
-    #     loaded_model_json = json_file.read()
-    #     json_file.close()
-    #     model = model_from_json(loaded_model_json)
-    #     model.load_weights("Model/emotion_model.h5")
-    #     return model
+            _, buffer = cv2.imencode('.jpg', frame)
+            content = io.BytesIO(buffer).getvalue()
+            image = vision.Image(content=content)
+
+            try:
+                response = client.face_detection(image=image)
+                faces = response.face_annotations
+
+                if faces:
+                    face = faces[0]
+                    emotions = [
+                        (face.joy_likelihood, "Happy"),
+                        (face.sorrow_likelihood, "Sad"),
+                        (face.anger_likelihood, "Angry"),
+                        (face.surprise_likelihood, "Surprised")
+                    ]
+                    most_likely_emotion = max(emotions, key=lambda item: item[0])
+                    likelihood, emotion = most_likely_emotion
+
+                    current_emotion = emotion_dict.get(likelihood.name, "Neutral")
+                else:
+                    current_emotion = "No Face Detected"
+            except Exception as e:
+                current_emotion = "Error"
+
+            return frame, most_likely_emotion
