@@ -3,3 +3,5 @@ numpy
 Werkzeug==2.1.0
 tensorflow
 keras==2.15.0
+webrtc_streaming
+google.cloud 

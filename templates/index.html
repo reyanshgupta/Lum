@@ -50,7 +50,6 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <!-- <a class="navbar-brand" href="/home">Lum</a> -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -77,80 +76,32 @@
     </div>
     <div class="container text-center">
         <h2>Welcome to Lum!</h2>
-        <p>Turn on your camera to get a playlist recommendation!</p>
-        <button id="camera-btn" class="btn btn-primary">Turn On Camera</button>
-        <div id="video-container" class="mt-4" style="display:none;">
-            <video id="video" playsinline autoplay style="display:none;"></video>
-        </div>
+        <p>Select or capture your image to get a playlist recommendation!</p>
+        <input type="file" accept="image/*" capture="environment" id="imageInput">
+        <button id="submit-btn" class="btn btn-primary">Submit Image</button>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script>
-    var checkInterval;
-    const videoElement = document.getElementById('video');
-    const cameraButton = document.getElementById('camera-btn');
+        document.getElementById('submit-btn').addEventListener('click', function() {
+            var imageInput = document.getElementById('imageInput');
+            if (imageInput.files.length > 0) {
+                var file = imageInput.files[0];
+                var formData = new FormData();
+                formData.append('file', file);
 
-    function checkEmotion() {
-    fetch('/check_emotion')
-    .then(response => response.json())
-    .then(data => {
-        if (data.emotion_detected) {
-            console.log("Emotion detected. Redirecting to /suggest_playlist");
-            stopCamera();
-            window.location.href = "/suggest_playlist";
-        }
-    });
-}
-
-
-    cameraButton.addEventListener('click', async () => {
-        if (videoElement.style.display === 'none') {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                videoElement.srcObject = stream;
-                videoElement.style.display = 'block';
-                cameraButton.textContent = 'Turn Off Camera';
-            } catch (error) {
-                console.error('Error accessing camera:', error);
-            }
-        } else {
-            stopCamera();
-        }
-    });
-
-    function stopCamera() {
-        const stream = videoElement.srcObject;
-        if (stream) {
-            const tracks = stream.getTracks();
-            tracks.forEach(track => track.stop());
-        }
-        videoElement.style.display = 'none';
-        cameraButton.textContent = 'Turn On Camera';
-    }
-        function checkEmotion() {
-            fetch('/check_emotion')
-            .then(response => response.json())
-            .then(data => {
-                if (data.emotion_detected) {
-                    stopCamera();
-                    window.location.href = "/suggest_playlist";
-                }
-            });
-        }
-
-        document.getElementById('camera-btn').addEventListener('click', function() {
-            var videoContainer = document.getElementById('video-container');
-            var btn = this;
-            if (videoContainer.style.display === "none") {
-                videoContainer.style.display = "block";
-                document.getElementById('video-stream').src = "{{ url_for('video_feed') }}";
-                btn.textContent = 'Turn Off Camera';
-                startCamera();
-            } else {
-                videoContainer.style.display = "none";
-                document.getElementById('video-stream').src = "";
-                btn.textContent = 'Turn On Camera';
-                stopCamera();
+                fetch('/analyze_emotion', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.emotion_detected) {
+                        window.location.href = "/suggest_playlist";
+                    } else {
+                        alert('No emotion detected or error occurred.');
+                    }
+                });
             }
         });
     </script>
