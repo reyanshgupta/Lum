@@ -80,6 +80,14 @@ def get_emotion(face):
 
 @app.route('/analyze_emotion', methods=['POST'])
 def analyze_emotion():
+    """
+    Analyzes the emotion in an image file uploaded via POST request.
+
+    Returns:
+        If emotion is detected in the image, returns a JSON response with 'emotion_detected' set to True.
+        If no emotion is detected in the image, returns a JSON response with 'emotion_detected' set to False.
+        If there is an error processing the image, returns a JSON response with 'error' set to 'Error processing image'.
+    """
     if 'file' not in request.files:
         return jsonify({'error': 'No file provided'}), 400
 
