@@ -93,7 +93,6 @@ def analyze_emotion():
         if faces:
             detected_emotion = get_emotion(faces[0])
             session['emotion'] = detected_emotion
-            # return redirect(url_for('suggest_playlist'))
             return jsonify({'emotion_detected': True})
         else:
             return jsonify({'emotion_detected': False})
