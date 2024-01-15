@@ -1,10 +1,5 @@
 import os
-from flask import Flask, redirect, render_template, Response, request, jsonify, session, url_for
-from camera import Video
-from collections import Counter, defaultdict
-from threading import Lock
-import time
-import cv2
+from flask import Flask, redirect, render_template, request, jsonify, session, url_for
 from google.cloud import vision
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'crested-climber-411318-0efea2445e25.json'
 
@@ -30,8 +25,8 @@ playlist_mapping = {
         '''<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1E4AInqF1aqV85?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>'''
     ],
     "Neutral": [
-        '''<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1EVHGWrwldPRtj?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>'''
-        '''<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4PP3DA4J0N8?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>'''
+        '''<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1EVHGWrwldPRtj?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>''',
+        '''<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4PP3DA4J0N8?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>''',
         '''<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1EIcJQdzRPklXj?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>'''
     ],
     "Fearful": [
@@ -60,7 +55,7 @@ def login():
 def home():
     return render_template('index.html')
 
-@app.route('/about')
+@app.route('/about') 
 def about():
     return render_template('about.html')
 
@@ -73,6 +68,7 @@ def user_playlist_suggest():
     return render_template('user_playlist_suggest.html')
 
 def get_emotion(face):
+    session.pop('emotion', None)
     emotions = {
         "joy": face.joy_likelihood,
         "sorrow": face.sorrow_likelihood,
@@ -97,7 +93,8 @@ def analyze_emotion():
         if faces:
             detected_emotion = get_emotion(faces[0])
             session['emotion'] = detected_emotion
-            return redirect(url_for('suggest_playlist'))
+            # return redirect(url_for('suggest_playlist'))
+            return jsonify({'emotion_detected': True})
         else:
             return jsonify({'emotion_detected': False})
     except Exception as e:
@@ -108,8 +105,7 @@ def analyze_emotion():
 def suggest_playlist():
     emotion = session.get('emotion', 'Neutral')
     suggested_playlists = playlist_mapping.get(emotion, playlist_mapping['Neutral'])
-    print("Detected emotion:", emotion)
-    return render_template('playlist.html', playlists=suggested_playlists, emotion=emotion)
+    return render_template('playlist.html', playlists=suggested_playlists, emotion=emotion) 
 
 if __name__ == '__main__':
     app.run(debug=True)
