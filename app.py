@@ -1,7 +1,7 @@
 import os
 from flask import Flask, redirect, render_template, request, jsonify, session, url_for
 from google.cloud import vision
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'crested-climber-411318-0efea2445e25.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'PATH_TO_YOUR_API_KEY_JSON_FILE'
 
 app = Flask(__name__)
 app.secret_key = 'flasksession1' 
