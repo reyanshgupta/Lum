@@ -1,4 +1,24 @@
 # Lum App
+<p align="center">
+  <img src="https://github.com/reyanshgupta/Lum/assets/56816381/3d28fa7e-fc5d-4060-94d9-3ae9b0cb5ece" alt="Lum Logo">
+</p>
+
+# Table of Contents
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Screenshots](#screenshots)
+    - [Login & Register](#login--register)
+    - [Home Page](#home-page)
+    - [Uploading Image](#uploading-image)
+    - [Suggested Playlists](#suggested-playlsts)
+    - [User Playlist Suggestion](#user-playlist-suggestion)
+    - [About Lum](#about-lum)
+    - [Contact Form](#contact-form)
+4. [Future Scope](#future-scope)
+5. [Installation](#installation)
+6. [Contributing](#contributing)
+7. [License](#license)
+8. [Contact](#contact)
 
 ## Introduction
 Lum is an innovative music app that elevates your mood by curating personalized playlists based on your emotions. Using advanced emotion detection powered by machine learning and the Google Cloud Vision API, Lum tunes into your feelings and recommends music that resonates with your current state.
@@ -8,6 +28,28 @@ Lum is an innovative music app that elevates your mood by curating personalized 
 - Personalized playlist suggestions based on detected emotions.
 - Integration with Spotify for a vast music library.
 - Simple and user-friendly interface.
+
+## Screenshots
+### Login & Register:
+![LoginRegister](https://github.com/reyanshgupta/Lum/assets/56816381/01927e79-b777-4be8-a4dd-1d4d83643568)
+
+### Home Page: 
+![Home](https://github.com/reyanshgupta/Lum/assets/56816381/8db83132-b1cc-4d6b-a6d4-94067cccfc73)
+
+### Uploading Image:
+![SadImageUploaded](https://github.com/reyanshgupta/Lum/assets/56816381/dd90bf27-ae76-4a93-af51-c9ae035c4e00)
+
+### Suggested Playlsts:
+![SuggestedPlaylists](https://github.com/reyanshgupta/Lum/assets/56816381/b5b41657-6752-4775-b419-5d846b1cfeaa)
+
+### User Playlist Suggestion: 
+![UserPlaylistSuggestion](https://github.com/reyanshgupta/Lum/assets/56816381/b7e42976-5a43-43e6-9859-ed9366b81755)
+
+### About Lum:
+![AboutLum](https://github.com/reyanshgupta/Lum/assets/56816381/97fb2739-d6e8-4dcb-9561-ee8869c2e5df)
+
+### Contact Form:
+![ContactForm](https://github.com/reyanshgupta/Lum/assets/56816381/479cbce9-0634-4e44-8d50-2f5a6b1407f1)
 
 ## Future Scope
 
